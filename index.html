@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>シフト希望提出</title>
+<style>
+body{font-family:sans-serif;margin:10px}
+table{border-collapse:collapse;font-size:12px}
+th,td{border:1px solid #ccc;padding:6px;text-align:center}
+.cell{width:32px;height:32px;cursor:pointer}
+.selected{background:#4caf50;color:#fff}
+.controls{position:sticky;top:0;background:#fff;padding:8px}
+</style>
+</head>
+<body>
+<div class="controls">
+<select id="name">
+<option>山田</option>
+<option>佐藤</option>
+<option>田中</option>
+</select>
+<button id="submitBtn">送信</button>
+</div>
+<div style="overflow:auto">
+<table id="grid"></table>
+</div>
+
+<script>
+const slots=8;
+const now=new Date();
+const y=now.getFullYear();
+const m=now.getMonth();
+const days=new Date(y,m+1,0).getDate();
+
+const table=document.getElementById("grid");
+let html="<tr><th>日付</th>";
+for(let i=1;i<=slots;i++) html+=`<th>${i}</th>`;
+html+="</tr>";
+
+for(let d=1;d<=days;d++){
+  html+=`<tr><th>${m+1}/${d}</th>`;
+  for(let s=1;s<=slots;s++){
+    html+=`<td class="cell" data-day="${d}" data-slot="${s}"></td>`;
+  }
+  html+="</tr>";
+}
+table.innerHTML=html;
+
+let dragging=false, mode=true;
+document.querySelectorAll(".cell").forEach(c=>{
+  c.addEventListener("pointerdown",e=>{
+    dragging=true;
+    mode=!c.classList.contains("selected");
+    c.classList.toggle("selected",mode);
+  });
+  c.addEventListener("pointerenter",e=>{
+    if(dragging) c.classList.toggle("selected",mode);
+  });
+});
+document.addEventListener("pointerup",()=>dragging=false);
+
+document.getElementById("submitBtn").onclick=async()=>{
+ const data={
+   month:`${y}-${String(m+1).padStart(2,'0')}`,
+   name:document.getElementById("name").value,
+   slots:[...document.querySelectorAll(".selected")].map(c=>({
+      day:c.dataset.day,slot:c.dataset.slot
+   }))
+ };
+ alert("GAS URLを設定後にfetch送信を実装してください\\n"+JSON.stringify(data).slice(0,200));
+};
+</script>
+</body>
+</html>
