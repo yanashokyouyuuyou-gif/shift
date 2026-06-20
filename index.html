@@ -68,7 +68,25 @@ document.getElementById("submitBtn").onclick=async()=>{
       day:c.dataset.day,slot:c.dataset.slot
    }))
  };
- alert("GAS URLを設定後にfetch送信を実装してください\\n"+JSON.stringify(data).slice(0,200));
+ try {
+  const res = await fetch(
+    "https://script.google.com/macros/s/AKfycbwGgXIwcakZVeZm8ToBTKICojbWLT-UAyrTEb1qYI0OfcOXzz618cNKxFueA0rOHh8yAQ/exec",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain"
+      },
+      body: JSON.stringify(data)
+    }
+  );
+
+  const text = await res.text();
+  alert("送信完了: " + text);
+
+} catch(err) {
+  console.error(err);
+  alert("送信失敗");
+}
 };
 </script>
 </body>
