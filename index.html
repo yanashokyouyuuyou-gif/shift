@@ -34,16 +34,27 @@ const m=now.getMonth();
 const days=new Date(y,m+1,0).getDate();
 
 const table=document.getElementById("grid");
-let html="<tr><th>日付</th>";
-for(let i=1;i<=slots;i++) html+=`<th>${i}</th>`;
+let html="<tr><th>コマ</th>";
+
+for(let d=1; d<=days; d++){
+  html += `<th>${m+1}/${d}</th>`;
+}
 html+="</tr>";
 
-for(let d=1;d<=days;d++){
-  html+=`<tr><th>${m+1}/${d}</th>`;
-  for(let s=1;s<=slots;s++){
-    html+=`<td class="cell" data-day="${d}" data-slot="${s}"></td>`;
+for(let s=1; s<=slots; s++){
+
+  html += `<tr><th>${s}コマ</th>`;
+
+  for(let d=1; d<=days; d++){
+
+    html += `<td class="cell"
+      data-day="${d}"
+      data-slot="${s}">
+    </td>`;
+
   }
-  html+="</tr>";
+
+  html += "</tr>";
 }
 table.innerHTML=html;
 
